@@ -4,7 +4,12 @@ insert js/css resources into .java files and wrapping in
 wicket resource render js method. Can also be used to inject files into
 other file types.
 
-usage:
+usage:<br>in your .java file, your resouces will be inserted between these markers:
+```
+//**infuse_boundary
+//**infuse_boundary
+```
+In your gulp file:
 ```
 var javaFolder = 'path/to/java/folder/';
 var javaFile = 'myJava.java';
