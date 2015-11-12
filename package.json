@@ -1,6 +1,6 @@
 {
   "name": "gulp-infuser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "\"inject resources into java files\"",
   "main": "index.js",
   "scripts": {
