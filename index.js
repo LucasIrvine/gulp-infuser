@@ -4,10 +4,9 @@ var PluginError = gutil.PluginError;
 // consts
 const PLUGIN_NAME = 'gulp-infuser';
 //main file level funct
-function gulpInfuser(resources, pathWrap, pathPrefix) {
-    if(!resources) {
-        throw new PluginError(PLUGIN_NAME,
-            'Missing destination file! (file you are writing to)');
+function gulpInfuser(config) {
+    if(!config.resources) {
+        throw new PluginError(PLUGIN_NAME,'Missing resource files!');
     }
     // creating a stream through which each file will pass
     var stream = through.obj(function (file, enc, cb) {
@@ -19,33 +18,32 @@ function gulpInfuser(resources, pathWrap, pathPrefix) {
             var srcFileString = file.contents.toString();
             //methods
             var infuser = {
-                boundaryTag: '//**infuse_boundary',
+                boundaryTag: config.optionalBoundaryMarker || '//**infuse_boundary',
+                pathPrefix: config.optionalPathPrefix || '',
                 fileTag: '//**infuse_file',
                 escQuot: '\"',
                 joinSym: '\r\n',
                 //accepts string or an array with length of 2
-                getBookEnds: function (pathWrap) {
+                getBookEnds: function () {
                     self = this;
-                    //if pathwrap is array, leave it, else break it up with //**infuse_file marker
-                    if(pathWrap.constructor === Array && pathWrap.length === 2) {
-                        self.bookEnds = pathWrap;
-                    } else if(typeof pathWrap === 'string' && pathWrap.indexOf(self.fileTag) !== -1) {
-                        self.bookEnds = pathWrap.split(self.fileTag);
+                    //if config.pathwrap is array, leave it, else break it up with //**infuse_file marker
+                    if(config.pathWrap.constructor === Array && config.pathWrap.length === 2) {
+                        self.bookEnds = config.pathWrap;
+                    } else if(typeof config.pathWrap === 'string' && config.pathWrap.indexOf(self.fileTag) !== -1) {
+                        self.bookEnds = config.pathWrap.split(self.fileTag);
                     } else {
-                        throw new PluginError(PLUGIN_NAME,
-                            'Resource wrap not formatted correctly, can either be a string with marker -> //**infuse_file, or an Array with a length === 2'
-                        );
+                        throw new PluginError(PLUGIN_NAME,'Resource wrap not formatted correctly, can either be a string with marker -> //**infuse_file, or an Array with a length === 2');
                         return cb();
                     }
                     //chainable
                     return self;
                 },
-                wrapFiles: function (filePathArr) {
+                wrapFiles: function () {
                     self = this;
                     //map to a new array with bookends
-                    var resourceArray = filePathArr.map(function (filePath) {
+                    var resourceArray = config.resources.map(function (filePath) {
                             //assemble a resource line for each
-                            return [self.bookEnds[0], self.escQuot, pathPrefix, filePath, self.escQuot, self.bookEnds[1]].join('');
+                            return [self.bookEnds[0], self.escQuot, self.pathPrefix, filePath, self.escQuot, self.bookEnds[1]].join('');
                         });
                     //join with purrrty line breaks
                     self.resourceArray = resourceArray.join(self.joinSym);
@@ -63,7 +61,7 @@ function gulpInfuser(resources, pathWrap, pathPrefix) {
                 }
             };
             //call actual methods
-            infuser.getBookEnds(pathWrap).wrapFiles(resources).editFile();
+            infuser.getBookEnds().wrapFiles().editFile();
         }
         // make sure the file goes through the next gulp plugin
         this.push(file);
