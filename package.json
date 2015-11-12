@@ -1,0 +1,15 @@
+{
+  "name": "gulp-infuser",
+  "version": "1.0.0",
+  "description": "\"inject resources into java files\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lucas Irvine",
+  "license": "ISC",
+  "dependencies": {
+    "gulp-util": "^3.0.7",
+    "through2": "^2.0.0"
+  }
+}
