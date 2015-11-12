@@ -17,7 +17,7 @@ var pathPrefix = '../../'; //optional
 var pathWrap = 'response.renderJavaScriptReference(new PackageResourceReference(ToolsWebApplicationResourceBase.class,//**infuse_file));';
 
 //for pathWrap an use either placeholder in a string (above)- //**infuse_file
-//or array - [tag/method open','tag/method close'];
+//or array - ['tag/method open','tag/method close'];
 
 gulp.task('infuseResources', function() {
     return gulp.src(javaFolder + javaFile)
