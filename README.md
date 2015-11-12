@@ -27,7 +27,7 @@ You can then set up separate gulp tasks for dev (not concatenated or minified) a
 
 ```
 // Dev Task
-gulp.task('dev', ['lint', 'sass', 'injectResources', 'watch']);
+gulp.task('dev', ['lint', 'sass', 'infuseResources', 'watch']);
 // Default Task
-gulp.task('default', ['lint', 'sass', 'scripts','injectMinifiedResources', 'watch']);
+gulp.task('default', ['lint', 'sass', 'scripts','infuseMinifiedResources', 'watch']);
 ```
